@@ -2,6 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import os.path
 
+def Sort(arr):
+    return(sorted(arr, key = lambda x: x[1])) 
+
 def getStat(url, weighted = True, loadStopWords = True, doMedian = True):
     #The function returns a words array and their frequencies from URL
 
@@ -153,10 +156,7 @@ def getStat(url, weighted = True, loadStopWords = True, doMedian = True):
                         if word[0] == replaceSymbols(w):
                             word[1] -= 0.75
                             break
-        return words
-
-    def Sort(arr):
-        return(sorted(arr, key = lambda x: x[1]))   
+        return words  
  
     #Function's implementation
 
@@ -179,25 +179,28 @@ def Compare(url1, url2):
     words1 = getStat(url1, False, False, False)  # no filter, weights = frequencies only, no stop-words file
     words2 = getStat(url2, False, False, False)
 
-    max1 = max(words1, key=lambda x:x[1])
-    max2 = max(words2, key=lambda x:x[1]) 
+    max1 = max(words1, key=lambda x: x[1])[1]
+    max2 = max(words2, key=lambda x: x[1])[1] 
     
-    print(max1)
-    print(max2)
-    
-    max = max1[1] if max1[1] < max2[1] else max2[1]
 
     commonWords = []
     for w1 in words1:
         for w2 in words2:
-            if w1[0] == w2[0]:
-                koef = w1[1]*100 // max if w1[1] < w2[1] else w2[1] * 100 // max
-                commonWords.append([w1[0], koef])  
+            if w1[0].lower() == w2[0].lower():
+                koef = w1[1]*100 // max1 if w1[1] > w2[1] else w2[1] * 100 // max2
+                if koef > 0:
+                    commonWords.append([w1[0], koef])  
 
-    return commonWords
+    return Sort(commonWords)
     
 
-#Test
+# Test 1
+url = 'https://en.wikipedia.org/wiki/The_Beatles'
+print(getStat(url))
+
+
+# Test 2
+print('\n----------------------------\n')
 
 url1 = 'https://en.wikipedia.org/wiki/The_Beatles'
 url2 = 'https://en.wikipedia.org/wiki/Imperial_War_Museum'
