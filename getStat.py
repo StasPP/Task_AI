@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os.path
 
-def getStat(url):
+def getStat(url, weighted = True, loadStopWords = True, doMedian = True):
     #The function returns a words array and their frequencies from URL
 
     def specialFilter(url, soup):
@@ -33,14 +33,16 @@ def getStat(url):
     def getWords(soup):  #returns parsed Html splitted into words        
         
         result = []
-        
-        # file_path = 'Task_AI\\stop_test.txt'
-        file_path = os.getcwd()+'//Task_AI//stop_test.txt'
-        # if os.path.exists(file_path):
-        my_file = open(file_path, "r")
+        if loadStopWords:
+            # file_path = 'Task_AI\\stop_test.txt'
+            file_path = os.getcwd()+'//Task_AI//stop_test.txt'
+            # if os.path.exists(file_path):
+            my_file = open(file_path, "r")
 
-        stopList = my_file.read()
-        stopList = stopList.split("\n")
+            stopList = my_file.read()
+            stopList = stopList.split("\n")
+        else:
+            stopList = []
 
         # Here also could be filtered some parts of the page before adding and splitting!
 
@@ -89,25 +91,23 @@ def getStat(url):
     
     def FilterFrequencies(result):      
         # Cut off the words under the median frequency
-        if len(result) > 1:
-            numbers = []
-            for r in result:   
-                canAdd = True
-                for n in numbers:
-                    if n == r[1]:
-                        canAdd = False
-                        break
-                    else:
-                        canAdd = True
-                    
-                if canAdd:
-                    numbers.append(r[1])   
-      
-
-            numbers.sort()
-
-            if len(numbers) > 3:
-                result = [item for item in result if item[1] > numbers[len(numbers)//2]] 
+        if doMedian:
+            if len(result) > 1:
+                numbers = []
+                for r in result:   
+                    canAdd = True
+                    for n in numbers:
+                        if n == r[1]:
+                            canAdd = False
+                            break
+                        else:
+                            canAdd = True       
+                    if canAdd:
+                        numbers.append(r[1])   
+        
+                numbers.sort()
+                if len(numbers) > 3:
+                    result = [item for item in result if item[1] > numbers[len(numbers)//2]] 
 
         return result
     
@@ -166,12 +166,41 @@ def getStat(url):
     soup = BeautifulSoup(html,"html.parser")
 
     words = getWords(soup)
-    wordStat = AddWeights( FilterFrequencies( getStat(words) ), soup )
-    
+    wordStat = FilterFrequencies( getStat(words) )
+
+    if weighted == True:
+        wordStat = AddWeights(wordStat, soup )
     return  Sort(wordStat)
+
+
+def Compare(url1, url2):
+
+    # This function can be used to detect stop-words by comparison between URLs
+    words1 = getStat(url1, False, False, False)  # no filter, weights = frequencies only, no stop-words file
+    words2 = getStat(url2, False, False, False)
+
+    max1 = max(words1, key=lambda x:x[1])
+    max2 = max(words2, key=lambda x:x[1]) 
+    
+    print(max1)
+    print(max2)
+    
+    max = max1[1] if max1[1] < max2[1] else max2[1]
+
+    commonWords = []
+    for w1 in words1:
+        for w2 in words2:
+            if w1[0] == w2[0]:
+                koef = w1[1]*100 // max if w1[1] < w2[1] else w2[1] * 100 // max
+                commonWords.append([w1[0], koef])  
+
+    return commonWords
+    
 
 #Test
 
-url = 'https://en.wikipedia.org/wiki/The_Beatles'
+url1 = 'https://en.wikipedia.org/wiki/The_Beatles'
+url2 = 'https://en.wikipedia.org/wiki/Imperial_War_Museum'
+
 # getStat(url)
-print(getStat(url))
+print(Compare(url1, url2))
