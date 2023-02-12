@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task_AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <script src="eel.js"></script>
+    <link rel="stylesheet" type="text/css" href="./result.css">
+</head>
+<body>
+    <div class="main">
+        <!-- <img src="./me1.png" alt="logo"> -->
+        <h1>Get Keywords from URL</h1>
+        <br>
+        <div class="inp">
+            <label for="inputUrl">Input URL</label>
+            <input type="text" id="inputUrl"  onclick="this.select();">
+        </div>
+        <div class="output">
+            <p id = 'out0'></p>
+        </div>
+        <div class="buttons">
+            <button id="proceed">Get key words</button>
+        </div>
+
+        <br>
+        <div class="output">
+            
+            <p id = 'out'></p>
+            <button class="invisible" id="more">...</button>
+        </div>
+
+    </div>
+    <script>
+       
+        let done = false
+        let waitInt = null
+        let anim = 0
+        let btn = document.getElementById('proceed');
+        let btnMore = document.getElementById('more');
+        let out = document.getElementById('out');
+        let out0 = document.getElementById('out0');
+        let arr = [];
+
+        async function displayStat() {
+            let url = document.getElementById('inputUrl').value;
+
+            // if (waitInt) clearInterval(waitInt)
+            out.innerText = ''
+            btn.innerText = 'Please wait...'
+            btn.disabled = true
+            arr = await eel.mainFunc(url)()
+            btn.innerText = 'Get key words'
+            btn.disabled = false
+            out.innerText = ''
+
+            for (let i = 0; i < arr.length; i++) {
+                out.innerText += out.innerText === '' ? arr[i][0] : '  ' + arr[i][0]
+
+                if (i >= 10) 
+                {
+                    btnMore.className = ''
+                    break;
+                }
+            }
+            arr.forEach(element => { 
+                
+            });
+            done = true
+            clearInterval(waitInt)
+            out0.innerText = ' ';
+        }
+        
+        function Wait() {
+            if (done) {out0.innerText = '';}
+            anim++
+            if (anim < 20) {out0.innerText = '.'.repeat(anim)}
+                else {out0.innerText = ' '; anim = 0}
+            if (done) {
+                clearInterval(waitInt)
+                out0.innerText = ' '
+                btn.innerText = 'Get key words'
+            }
+        }
+
+        function ShowAll(){
+            out.innerText = ''
+            btnMore.className = 'invisible'
+            arr.forEach(element => { 
+                out.innerText += out.innerText === '' ? element[0] : '  ' + element[0]
+            });
+        }
+
+        function btnClick() {      
+            done = false
+            waitInt = setInterval(Wait, 500) 
+            displayStat()
+            out0.innerText = ' '
+            
+        }
+
+        
+        btn.addEventListener('click', btnClick)
+        btnMore.addEventListener('click', ShowAll)
+
+
+        
+    </script>
+</body>
+</html>

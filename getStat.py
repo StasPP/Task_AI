@@ -2,8 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 import os.path
 
+def Test():
+    return [0, 0, 0]
+
 def Sort(arr):
-    return(sorted(arr, key = lambda x: x[1])) 
+    return(sorted(arr, key = lambda x: -x[1])) 
 
 def getStat(url, weighted = True, loadStopWords = True, doMedian = True):
     #The function returns a words array and their frequencies from URL
@@ -22,7 +25,7 @@ def getStat(url, weighted = True, loadStopWords = True, doMedian = True):
         return soup.body.strings
 
     def replaceSymbols(str):
-        toDel = "'([;,.!?])"
+        toDel = "'([;,.!?])/\\"
 
         result = ''
         for s in str:
@@ -38,7 +41,8 @@ def getStat(url, weighted = True, loadStopWords = True, doMedian = True):
         result = []
         if loadStopWords:
             # file_path = 'Task_AI\\stop_test.txt'
-            file_path = os.getcwd()+'//Task_AI//stop_test.txt'
+            # file_path = os.getcwd()+'//Task_AI//stop_test.txt'
+            file_path = os.getcwd()+'//stop_test.txt'
             # if os.path.exists(file_path):
             my_file = open(file_path, "r")
 
@@ -77,7 +81,7 @@ def getStat(url, weighted = True, loadStopWords = True, doMedian = True):
         for i in words:
             found = False
             for j in result:
-                if j[0] == i: 
+                if j[0].lower() == i.lower(): 
                     found = True
                     #increase the number of coincidences for the word found
                     j[1] += 1
@@ -129,6 +133,7 @@ def getStat(url, weighted = True, loadStopWords = True, doMedian = True):
             for w in h_word:
                 for word in words:
                     if word[0] == w:
+                        word[1] += 1
                         word[1] *= 2
                         break
         for h_word in h23:
@@ -136,6 +141,7 @@ def getStat(url, weighted = True, loadStopWords = True, doMedian = True):
             for w in h_word:
                 for word in words:
                     if word[0] == w:
+                        word[1] += 1
                         word[1] *= 1.5
                         break
         for h_word in h45:
@@ -143,6 +149,7 @@ def getStat(url, weighted = True, loadStopWords = True, doMedian = True):
             for w in h_word:
                 for word in words:
                     if word[0] == w:
+                        word[1] += 1
                         word[1] *= 1.25
                         break
         
@@ -193,17 +200,17 @@ def Compare(url1, url2):
 
     return Sort(commonWords)
     
+def Test():
+    # Test 1
+    url = 'https://en.wikipedia.org/wiki/The_Beatles'
+    print(getStat(url))
 
-# Test 1
-url = 'https://en.wikipedia.org/wiki/The_Beatles'
-print(getStat(url))
 
+    # Test 2
+    print('\n----------------------------\n')
 
-# Test 2
-print('\n----------------------------\n')
+    url1 = 'https://en.wikipedia.org/wiki/The_Beatles'
+    url2 = 'https://en.wikipedia.org/wiki/Imperial_War_Museum'
 
-url1 = 'https://en.wikipedia.org/wiki/The_Beatles'
-url2 = 'https://en.wikipedia.org/wiki/Imperial_War_Museum'
-
-# getStat(url)
-print(Compare(url1, url2))
+    # getStat(url)
+    print(Compare(url1, url2))

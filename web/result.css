@@ -1,0 +1,109 @@
+html, body { 
+    /* background: dodgerblue; */
+    background: linear-gradient(rgb(230, 21, 177), rgb(197, 78, 9));
+    background-size: 100%;
+    background-attachment: fixed;
+
+}
+
+.main {
+    background-color: rgba(49, 44, 44, 0.897);
+    filter: drop-shadow(6vw 6vw 6vw rgb(34, 4, 34) );
+    text-align: center;
+    max-width: 70%;
+    width: 70%;
+    border-radius: 10px;
+    padding: 10px;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%); 
+    position: absolute;
+    transition: top 1000ms;
+    margin: auto;
+}
+
+.inp {
+    text-align: left;
+    width: 90%;
+    padding: 5vmin;
+}
+
+h1 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 5vmin;
+    color: whitesmoke;
+}
+
+input {
+    font-size: 2.5vmin; 
+    margin: 10px;
+    clear: both;
+    /* text-align: right; */
+    width:  90%;
+    font-family: monospace;
+    display: block;
+
+}
+
+.invisible {
+    display: none
+}
+
+button {
+    font-size: 4vmin;  
+    margin: 8px;
+    transition: 300ms;
+}
+
+.output{
+    text-align: center;
+    width: fit-content;
+    margin: auto;
+    font-family: monospace;
+    color: whitesmoke;
+    font-size: 3vmin; 
+}
+
+#out, #out0 {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+
+img {
+    float: right;
+    width : 18vmin;
+}
+
+label {
+    color: whitesmoke;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    font-stretch: 10vw;
+}
+
+input {
+    opacity: 60%;
+    border-radius: 5vmin;
+}
+
+button {
+    border-radius: 5vmin;
+    background: radial-gradient(rgb(117, 10, 90), rgb(78, 3, 49));
+    border: rgb(197, 9, 125) ;
+    color: rgb(228, 216, 216);
+    padding: 1.5vmin;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover {
+    transform: translate(0, 1vmin);
+    background: radial-gradient(rgb(229, 140, 207), rgb(221, 44, 153));
+    color: rgb(53, 2, 40) ;
+}
+
+
+
