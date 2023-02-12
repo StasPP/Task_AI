@@ -40,7 +40,7 @@ def getStat(url, weighted = True, loadStopWords = True, doMedian = True):
         
         result = []
         if loadStopWords:
-            # file_path = 'Task_AI\\stop_test.txt'
+            # file_path = 'Task_AI//stop_test.txt'
             # file_path = os.getcwd()+'//Task_AI//stop_test.txt'
             file_path = os.getcwd()+'//stop_test.txt'
             # if os.path.exists(file_path):
